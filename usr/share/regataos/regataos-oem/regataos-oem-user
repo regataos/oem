@@ -1,0 +1,84 @@
+#!/bin/bash
+
+while :
+do
+
+# Check desktop
+user=$(users | awk '{print $1}')
+test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
+desktop_dir="${XDG_DESKTOP_DIR:-/home/$user/Desktop}"
+desktop_folder="$(echo $desktop_dir | cut -d/ -f 3-)"
+desktop_dir="/home/$desktop_folder"
+echo "Desktop: $desktop_dir"
+
+# Prepare KDE Plasma for post-installation setup.
+function prepare_plasma() {
+	mkdir -p "/home/visitante/.config"
+	mkdir -p "/home/visitante/.config/autostart"
+	mkdir -p "/home/visitante/.config/autostart-scripts"
+
+	cp -f "/usr/share/regataos/regataos-oem/autostart/live-installer.desktop" "/home/visitante/.config/autostart/live-installer.desktop"
+	cp -f "/usr/share/regataos/regataos-oem/autostart-scripts/check-calamares.sh" "/home/visitante/.config/autostart-scripts/check-calamares.sh"
+
+	rm -f "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
+	cp -f "/usr/share/regataos/regataos-oem/plasma-org.kde.plasma.desktop-appletsrc" "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
+
+	rm -f "/home/visitante/.config/kdeglobals"
+	cp -f "/etc/xdg/kdeglobals" "/home/visitante/.config/kdeglobals"
+}
+
+if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
+	echo "In Live Mode"
+
+	if test ! -e "$desktop_dir/trash.desktop"; then
+		cd "$desktop_dir/"
+		cp -f "/usr/share/kio_desktop/directory.trash" "trash.desktop"
+		cp -f "/usr/share/kio_desktop/DesktopLinks/Home.desktop" "Home.desktop"
+		ln -s "/usr/share/regataos/regataos-oem/live-installer.desktop" "live-installer.desktop"
+		xdotool key F5
+	fi
+
+else
+	if [[ $(rpm -q calamares) == *"x86"* ]]; then
+		echo "In post-installation..."
+
+		if test ! -e "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"; then
+			prepare_plasma
+
+		elif [[ $(grep -r "org.kde.panel" "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc" | cut -d'=' -f 2-) == *"org.kde.panel"* ]]; then
+			prepare_plasma
+
+		else
+			if [ $(wc -l "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc" | awk '{print $1}') -ne 26 ]; then
+				prepare_plasma
+			fi
+		fi
+
+		if test -e "$desktop_dir/trash.desktop"; then
+			cd "$desktop_dir/"
+			rm -rf *.desktop
+			xdotool key F5
+
+		elif test -e "$desktop_dir/Home.desktop"; then
+			cd "$desktop_dir/"
+			rm -rf *.desktop
+			xdotool key F5
+
+		else
+			if test -e "$desktop_dir/live-installer.desktop"; then
+				cd "$desktop_dir/"
+				rm -rf *.desktop
+				xdotool key F5
+			fi
+		fi
+
+	else
+		if test ! -e "/usr/bin/calamares"; then
+			echo "The operating system appears to be installed, goodbye!"
+			break
+		fi
+	fi
+fi
+
+   sleep 1
+done

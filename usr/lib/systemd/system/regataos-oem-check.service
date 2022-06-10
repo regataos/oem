@@ -1,0 +1,9 @@
+[Unit]
+Description=Check OEM for Regata OS
+Before=display-manager.service
+
+[Service]
+ExecStart=/bin/sh /usr/share/regataos/regataos-oem-check.sh
+
+[Install]
+WantedBy=graphical.target

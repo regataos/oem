@@ -1,0 +1,9 @@
+[Unit]
+Description=OEM for Regata OS
+Before=display-manager.service
+
+[Service]
+ExecStart=/bin/sh /usr/share/regataos/regataos-oem.sh
+
+[Install]
+WantedBy=graphical.target
