@@ -5,7 +5,7 @@ After=plasma-core.target
 
 [Service]
 Type=simple
-ExecStartPre=/bin/sleep 25
+ExecStartPre=/bin/sleep 20
 ExecStart=/usr/share/regataos/regataos-oem/regataos-oem-user
 RemainAfterExit=true
 Restart=on-failure
