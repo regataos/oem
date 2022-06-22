@@ -33,8 +33,18 @@ if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
 	if test ! -e "$desktop_dir/trash.desktop"; then
 		cd "$desktop_dir/"
 		cp -f "/usr/share/kio_desktop/directory.trash" "trash.desktop"
+		xdotool key F5
+	fi
+
+	if test ! -e "$desktop_dir/Home.desktop"; then
+		cd "$desktop_dir/"
 		cp -f "/usr/share/kio_desktop/DesktopLinks/Home.desktop" "Home.desktop"
-		ln -s "/usr/share/regataos/regataos-oem/live-installer.desktop" "live-installer.desktop"
+		xdotool key F5
+	fi
+
+	if test ! -e "$desktop_dir/live-installer.desktop"; then
+		cd "$desktop_dir/"
+		ln -sf "/usr/share/regataos/regataos-oem/live-installer.desktop" "live-installer.desktop"
 		xdotool key F5
 	fi
 
