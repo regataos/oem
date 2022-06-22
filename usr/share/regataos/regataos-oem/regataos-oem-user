@@ -63,8 +63,21 @@ else
 		fi
 
 	else
+		if test ! -e "$desktop_dir/trash.desktop"; then
+			cd "$desktop_dir/"
+			cp -f "/usr/share/kio_desktop/directory.trash" "trash.desktop"
+			xdotool key F5
+		fi
+
+		if test ! -e "$desktop_dir/Home.desktop"; then
+			cd "$desktop_dir/"
+			cp -f "/usr/share/kio_desktop/DesktopLinks/Home.desktop" "Home.desktop"
+			xdotool key F5
+		fi
+
 		if test ! -e "/usr/bin/calamares"; then
 			echo "The operating system appears to be installed, goodbye!"
+			rm -f "/usr/share/regataos/regataos-oem/regataos-oem-user"
 			break
 		fi
 	fi

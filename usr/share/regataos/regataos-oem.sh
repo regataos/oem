@@ -62,6 +62,18 @@ else
 		fi
 
     else
+		ps -C calamares > /dev/null
+		if [ $? = 0 ]
+		then
+			sudo zypper --non-interactive remove calamares-lang calalamres calamares-branding-upstream
+
+			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
+			sed -i 's/visitante/#visitante/' /etc/sudoers
+
+			sleep 5
+			sudo reboot
+		fi
+
 		if test ! -e "/usr/bin/calamares"; then
 			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 			sed -i 's/visitante/#visitante/' /etc/sudoers
