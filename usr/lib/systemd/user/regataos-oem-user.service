@@ -1,0 +1,14 @@
+[Unit]
+Description=Regata OS OEM User Service
+PartOf=graphical-session.target
+After=plasma-core.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 25
+ExecStart=/usr/share/regataos/regataos-oem/regataos-oem-user
+RemainAfterExit=true
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

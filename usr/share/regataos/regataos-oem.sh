@@ -7,22 +7,24 @@ do
 
 # Prepare KDE Plasma for post-installation setup.
 function prepare_plasma() {
-	mkdir -p "/home/visitante/.config"
 	mkdir -p "/home/visitante/.config/autostart"
-	mkdir -p "/home/visitante/.config/autostart-scripts"
-
-	cp -f "/usr/share/regataos/regataos-oem/autostart/live-installer.desktop" "/home/visitante/.config/autostart/live-installer.desktop"
-	cp -f "/usr/share/regataos/regataos-oem/autostart-scripts/check-calamares.sh" "/home/visitante/.config/autostart-scripts/check-calamares.sh"
+	cp -f "/usr/share/regataos/regataos-oem/autostart/live-installer.desktop" \
+		"/home/visitante/.config/autostart/live-installer.desktop"
 
 	rm -f "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
-	cp -f "/usr/share/regataos/regataos-oem/plasma-org.kde.plasma.desktop-appletsrc" "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
+	cp -f "/usr/share/regataos/regataos-oem/plasma-org.kde.plasma.desktop-appletsrc" \
+		"/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
 
 	rm -f "/home/visitante/.config/kdeglobals"
 	cp -f "/etc/xdg/kdeglobals" "/home/visitante/.config/kdeglobals"
+
+	chmod 777 "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
+	chmod 777 "/home/visitante/.config/kdeglobals"
 }
 
 if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
     echo "In Live Mode..."
+	break
 else
     if test -e "/home/visitante"; then
 		if [[ $(rpm -q calamares) == *"x86"* ]]; then
