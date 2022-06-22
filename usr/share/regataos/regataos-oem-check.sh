@@ -18,20 +18,9 @@ else
 			tar xf /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz -C /
 		fi
 
-		ps -C calamares > /dev/null
-		if [ $? = 0 ]
-		then
-			echo "The Calamares installer is running..."
-			/usr/share/regataos/regataos-oem-check2.sh start
-			break
-		else
-			echo "The Calamares installer is not running..."
-		fi
-
 	else
 		if test ! -e "/usr/bin/calamares"; then
 			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
-			rm -f /usr/share/regataos/regataos-oem-check2.sh
 			rm -f /usr/share/regataos/regataos-oem-check.sh
 			break
 		fi

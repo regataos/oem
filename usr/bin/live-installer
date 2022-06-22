@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Fix for Calamares
+if test ! -e /run/rootfsbase ; then
+	sudo ln -s / /run/rootfsbase
+fi
+
+sudo -E calamares
+
+if [[ $(rpm -q regataos-oem) != *"x86"* ]]; then
+	if [[ $(rpm -q calamares) == *"x86"* ]]; then
+		systemctl poweroff
+	fi
+fi

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/share/regataos/regataos-oem/regataos-oem-user
+Exec=sleep 5; /usr/share/regataos/regataos-oem/regataos-oem-user
 OnlyShowIn=KDE;
 Type=Service
 MimeType=
