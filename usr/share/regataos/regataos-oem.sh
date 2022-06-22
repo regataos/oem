@@ -70,17 +70,31 @@ else
 			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 			sed -i 's/visitante/#visitante/' /etc/sudoers
 
-			sleep 5
-			sudo reboot
-		fi
-
-		if test ! -e "/usr/bin/calamares"; then
-			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
-			sed -i 's/visitante/#visitante/' /etc/sudoers
-
 			echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
 			rm -f "/usr/share/regataos/regataos-oem.sh"
-			break
+
+			sudo reboot
+
+		else
+			if test -e "/usr/bin/calamares"; then
+				sudo zypper --non-interactive remove calamares-lang calalamres calamares-branding-upstream
+
+				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
+				sed -i 's/visitante/#visitante/' /etc/sudoers
+
+				echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
+				rm -f "/usr/share/regataos/regataos-oem.sh"
+
+				sudo reboot
+
+			else
+				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
+				sed -i 's/visitante/#visitante/' /etc/sudoers
+
+				echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
+				rm -f "/usr/share/regataos/regataos-oem.sh"
+				break
+			fi
 		fi
     fi
 fi
