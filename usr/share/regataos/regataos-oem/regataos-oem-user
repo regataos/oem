@@ -32,54 +32,54 @@ if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
 		xdotool key F5
 	fi
 
-else
-	if [[ $(rpm -q calamares) == *"x86"* ]]; then
-		echo "In post-installation..."
+elif [[ $(rpm -q calamares) == *"x86"* ]]; then
+	echo "In post-installation..."
 
-		if test -e "$desktop_dir/trash.desktop"; then
-			cd "$desktop_dir/"
-			rm -rf *.desktop
-			xdotool key F5
+	if test -e "$desktop_dir/trash.desktop"; then
+		cd "$desktop_dir/"
+		rm -rf *.desktop
+		xdotool key F5
 
-		elif test -e "$desktop_dir/Home.desktop"; then
-			cd "$desktop_dir/"
-			rm -rf *.desktop
-			xdotool key F5
-
-		else
-			if test -e "$desktop_dir/live-installer.desktop"; then
-				cd "$desktop_dir/"
-				rm -rf *.desktop
-				xdotool key F5
-			fi
-		fi
-
-		if [[ $user == *"visitante"* ]]; then
-			ps -C calamares > /dev/null
-			if [ $? = 1 ]
-			then
-				/usr/bin/live-installer start
-			fi
-		fi
+	elif test -e "$desktop_dir/Home.desktop"; then
+		cd "$desktop_dir/"
+		rm -rf *.desktop
+		xdotool key F5
 
 	else
-		if test ! -e "$desktop_dir/trash.desktop"; then
+		if test -e "$desktop_dir/live-installer.desktop"; then
 			cd "$desktop_dir/"
-			cp -f "/usr/share/kio_desktop/directory.trash" "trash.desktop"
+			rm -rf *.desktop
 			xdotool key F5
 		fi
+	fi
 
-		if test ! -e "$desktop_dir/Home.desktop"; then
-			cd "$desktop_dir/"
-			cp -f "/usr/share/kio_desktop/DesktopLinks/Home.desktop" "Home.desktop"
-			xdotool key F5
+	if [[ $user == *"visitante"* ]]; then
+		ps -C calamares > /dev/null
+		if [ $? = 1 ]
+		then
+			/usr/bin/live-installer start
 		fi
+	fi
 
-		if test ! -e "/usr/bin/calamares"; then
-			echo "The operating system appears to be installed, goodbye!"
-			rm -f "/usr/share/regataos/regataos-oem/regataos-oem-user"
-			break
-		fi
+else
+	echo "System installed!"
+
+	if test ! -e "$desktop_dir/trash.desktop"; then
+		cd "$desktop_dir/"
+		cp -f "/usr/share/kio_desktop/directory.trash" "trash.desktop"
+		xdotool key F5
+	fi
+
+	if test ! -e "$desktop_dir/Home.desktop"; then
+		cd "$desktop_dir/"
+		cp -f "/usr/share/kio_desktop/DesktopLinks/Home.desktop" "Home.desktop"
+		xdotool key F5
+	fi
+
+	if test ! -e "/usr/bin/calamares"; then
+		echo "The operating system appears to be installed, goodbye!"
+		rm -f "/usr/share/regataos/regataos-oem/regataos-oem-user"
+		break
 	fi
 fi
 

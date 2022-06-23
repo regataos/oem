@@ -55,7 +55,7 @@ else
 				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 				sed -i 's/visitante/#visitante/' /etc/sudoers
 
-				echo "Calamares installer is not installed. The Regata OS appears to be installed, goodbye!"
+				echo "The Regata OS appears to be installed, goodbye!"
 				rm -f "/usr/share/regataos/regataos-oem.sh"
 				break
 			fi
@@ -70,7 +70,7 @@ else
 			sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 			sed -i 's/visitante/#visitante/' /etc/sudoers
 
-			echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
+			echo "The Regata OS appears to be installed, goodbye!"
 			rm -f "/usr/share/regataos/regataos-oem.sh"
 
 			sudo reboot
@@ -82,7 +82,7 @@ else
 				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 				sed -i 's/visitante/#visitante/' /etc/sudoers
 
-				echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
+				echo "The Regata OS appears to be installed, goodbye!"
 				rm -f "/usr/share/regataos/regataos-oem.sh"
 
 				sudo reboot
@@ -91,7 +91,7 @@ else
 				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
 				sed -i 's/visitante/#visitante/' /etc/sudoers
 
-				echo "Directory /home/visitante not found. The Regata OS appears to be installed, goodbye!"
+				echo "The Regata OS appears to be installed, goodbye!"
 				rm -f "/usr/share/regataos/regataos-oem.sh"
 				break
 			fi

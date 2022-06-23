@@ -9,7 +9,7 @@ if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
 	echo "In Live Mode..."
 	break
 else
-	if test -e "/home/visitante" ; then
+	if test -e "/home/visitante"; then
 		if [[ $(grep -r "visitante" "/etc/sysconfig/displaymanager" | cut -d'=' -f 2- | sed 's/"//g') != *"visitante"* ]]; then
 			sed -i 's/DISPLAYMANAGER_AUTOLOGIN=""/DISPLAYMANAGER_AUTOLOGIN="visitante"/' /etc/sysconfig/displaymanager
 		fi
