@@ -8,14 +8,38 @@ do
 if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
 	echo "In Live Mode..."
 	break
+
 else
 	if test -e "/home/visitante"; then
-		if [[ $(grep -r "visitante" "/etc/sysconfig/displaymanager" | cut -d'=' -f 2- | sed 's/"//g') != *"visitante"* ]]; then
-			sed -i 's/DISPLAYMANAGER_AUTOLOGIN=""/DISPLAYMANAGER_AUTOLOGIN="visitante"/' /etc/sysconfig/displaymanager
-		fi
+		if [[ $(rpm -q calamares) == *"x86"* ]]; then
+			if [[ $(grep -r "visitante" "/etc/sysconfig/displaymanager" | cut -d'=' -f 2- | sed 's/"//g') != *"visitante"* ]]; then
+				sed -i 's/DISPLAYMANAGER_AUTOLOGIN=""/DISPLAYMANAGER_AUTOLOGIN="visitante"/' /etc/sysconfig/displaymanager
+			fi
 
-		if [[ $(grep -r "users" "/usr/share/calamares/settings.conf" | awk '{print $2}') != *"users"* ]]; then
-			tar xf /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz -C /
+			if [[ $(grep -r "users" "/usr/share/calamares/settings.conf" | awk '{print $2}') != *"users"* ]]; then
+				tar xf /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz -C /
+			fi
+
+			break
+
+		else
+			if test ! -e "/usr/bin/calamares"; then
+				userdel -rf visitante
+				sed -i 's/DISPLAYMANAGER_AUTOLOGIN="visitante"/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
+				rm -f /usr/share/regataos/regataos-oem-check.sh
+				break
+
+			else
+				if [[ $(grep -r "visitante" "/etc/sysconfig/displaymanager" | cut -d'=' -f 2- | sed 's/"//g') != *"visitante"* ]]; then
+					sed -i 's/DISPLAYMANAGER_AUTOLOGIN=""/DISPLAYMANAGER_AUTOLOGIN="visitante"/' /etc/sysconfig/displaymanager
+				fi
+
+				if [[ $(grep -r "users" "/usr/share/calamares/settings.conf" | awk '{print $2}') != *"users"* ]]; then
+					tar xf /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz -C /
+				fi
+
+				break
+			fi
 		fi
 
 	else
@@ -27,5 +51,5 @@ else
 	fi
 fi
 
-   sleep 2
+   sleep 1
 done

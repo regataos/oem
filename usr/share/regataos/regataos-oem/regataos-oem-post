@@ -1,0 +1,54 @@
+#!/bin/bash
+
+cd /
+
+while :
+do
+
+# Wait until the environment loads.
+ps -C "plasmashell" > /dev/null
+if [ $? = 0 ]; then
+	if test -e "/home/visitante"; then
+		if [[ $(rpm -q regataos-oem) == *"x86"* ]]; then
+			echo "In Live Mode..."
+			break
+
+		elif [[ $(rpm -q calamares) == *"x86"* ]]; then
+			echo "In post-installation..."
+
+			sleep 5
+
+			ps -C calamares > /dev/null
+			if [ $? = 1 ]
+			then
+				/usr/bin/live-installer start
+				break
+			fi
+
+		else
+			if test -e "/usr/bin/calamares"; then
+				echo "In post-installation..."
+
+				sleep 5
+
+				ps -C calamares > /dev/null
+				if [ $? = 1 ]
+				then
+					/usr/bin/live-installer start
+					break
+				fi
+			fi
+		fi
+
+	else
+		if test -e /home/*/*/Home.desktop; then
+			echo "The operating system appears to be installed, goodbye!"
+			rm -f "/usr/share/regataos/regataos-oem/regataos-oem-user"
+			rm -f "/usr/share/regataos/regataos-oem/regataos-oem-post"
+			break
+		fi
+	fi
+fi
+
+   sleep 1
+done

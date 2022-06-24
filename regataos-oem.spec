@@ -46,16 +46,18 @@ fi
 cp -f /usr/share/regataos/regataos-oem/psettings.tar.xz \
   /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz
 
+systemctl daemon-reload
 systemctl enable regataos-oem.service
-systemctl stop regataos-oem.service
 systemctl enable regataos-oem-check.service
-systemctl stop regataos-oem-check.service
+systemctl --global enable regataos-oem-post.service
+systemctl --global enable regataos-oem-user.service
 
 %postun
+systemctl daemon-reload
 systemctl enable regataos-oem.service
-systemctl stop regataos-oem.service
 systemctl enable regataos-oem-check.service
-systemctl stop regataos-oem-check.service
+systemctl --global enable regataos-oem-post.service
+systemctl --global enable regataos-oem-user.service
 
 kmsg=$(grep -r "loglevel=0" /etc/default/grub)
 if [[ $kmsg != *"loglevel=0"* ]]; then
@@ -127,22 +129,6 @@ cp -f /usr/share/regataos/regataos-oem/autostart/live-installer.desktop /home/vi
 sed -i 's/DISPLAYMANAGER_AUTOLOGIN=""/DISPLAYMANAGER_AUTOLOGIN="visitante"/' /etc/sysconfig/displaymanager
 tar xf /usr/share/regataos/regataos-oem/postinstall-settings.tar.xz -C /
 
-# Fix KDE Plasma for pos-install
-mkdir -p "/home/visitante/.config"
-mkdir -p "/home/visitante/.config/autostart"
-mkdir -p "/home/visitante/.config/autostart-scripts"
-
-cp -f "/usr/share/regataos/regataos-oem/autostart/live-installer.desktop" "/home/visitante/.config/autostart/live-installer.desktop"
-cp -f "/usr/share/regataos/regataos-oem/autostart-scripts/check-calamares.sh" "/home/visitante/.config/autostart-scripts/check-calamares.sh"
-
-rm -f "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
-cp -f "/usr/share/regataos/regataos-oem/plasma-org.kde.plasma.desktop-appletsrc" "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
-chmod 777 "/home/visitante/.config/plasma-org.kde.plasma.desktop-appletsrc"
-
-rm -f "/home/visitante/.config/kdeglobals"
-cp -f "/etc/xdg/kdeglobals" "/home/visitante/.config/kdeglobals"
-chmod 777 "/home/visitante/.config/kdeglobals"
-
 # Prepare Wine-GCS
 wine_version="$(cat /opt/regataos-wine/wine-gcs-version.txt | cut -d/ -f 4 | sed 's/wine-gcs-//')"
 if test ! -e "/opt/regataos-wine/wine-gcs-$wine_version"; then
@@ -161,9 +147,6 @@ check_kernel_version=$(grep -r "with Linux $kernel_version" /boot/grub2/grub.cfg
 if [[ $check_kernel_version == *"with Linux $kernel_version"* ]]; then
   sed -i "s/with Linux $kernel_fixed_version1/with Linux $kernel_fixed_version2/g" "/boot/grub2/grub.cfg"
 fi
-
-# Enable KDE Plasma boot with systemd only if the system is installed.
-echo "systemdBoot=false" > "/etc/xdg/startkderc"
 
 %clean
 
