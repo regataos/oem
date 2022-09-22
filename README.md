@@ -1,2 +1,2 @@
 # oem
-Regatta OS on OEM installations.
+Regata OS on OEM installations.
